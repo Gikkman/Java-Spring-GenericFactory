@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.gikk.fruit.Consumers;
 import com.gikk.fruit.FruitConsumer;
+import com.gikk.fruit.apple.Apple;
 import com.gikk.fruit.banana.Banana;
 
 @Component
@@ -19,6 +20,7 @@ public class BananaConsumer implements FruitConsumer<Banana>
 	void post()
 	{
 		c.register(Banana.class, this);
+		c.register(Apple.class, this);
 	}
 
 	@Override
