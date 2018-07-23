@@ -20,7 +20,7 @@ public class BananaConsumer implements FruitConsumer<Banana>
 	void post()
 	{
 		c.register(Banana.class, this);
-		c.register(Apple.class, this);
+		c.register(Apple.class, this); // <-- Why does this work?
 	}
 
 	@Override

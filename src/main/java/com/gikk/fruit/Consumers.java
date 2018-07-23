@@ -27,7 +27,7 @@ public class Consumers<T extends Fruit>
 		List<String> responses = new ArrayList<>();
 		for (FruitConsumer<T> c : cons)
 		{
-			String response = c.consume(fruit);
+			String response = c.consume(fruit); // <-- Breaks if T is Apple
 			responses.add(response);
 		}
 		return responses.stream().collect(Collectors.joining(" | ", "[", "]"));
