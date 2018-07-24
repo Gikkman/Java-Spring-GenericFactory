@@ -2,7 +2,7 @@ package com.gikk.fruit.banana;
 
 import com.gikk.fruit.Fruit;
 
-public class Banana implements Fruit
+public class Banana extends Fruit
 {
 	private final int weight;
 

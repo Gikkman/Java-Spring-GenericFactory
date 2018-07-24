@@ -1,8 +1,8 @@
 package com.gikk.fruit;
 
-public interface Fruit
+public abstract class Fruit
 {
-	int getWeight();
+	public abstract int getWeight();
 
-	String getColor();
+	public abstract String getColor();
 }

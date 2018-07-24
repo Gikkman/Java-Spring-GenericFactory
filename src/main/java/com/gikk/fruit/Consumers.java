@@ -11,25 +11,36 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Consumers<T extends Fruit>
+public class Consumers
 {
-	private final Map<Class<T>, Collection<FruitConsumer<T>>> consumers = new HashMap<>();
+	private final Map<Class<? extends Fruit>, Collection<FruitConsumer<? extends Fruit>>> consumers = new HashMap<>();
 
-	public void register(Class<T> clazz, FruitConsumer<T> consumer)
+	public <T extends Fruit> void register(Class<T> clazz, FruitConsumer<T> consumer)
 	{
 		consumers.putIfAbsent(clazz, new HashSet<>());
 		consumers.get(clazz).add(consumer);
 	}
 
-	public String consume(T fruit)
+	public <T extends Fruit> String consume(T fruit)
 	{
-		Collection<FruitConsumer<T>> cons = consumers.get(fruit.getClass());
+		// It is safe to cast a class to it's own super class.
+		Class<? super T> key = (Class<? super T>) fruit.getClass();
+
 		List<String> responses = new ArrayList<>();
-		for (FruitConsumer<T> c : cons)
+		do
 		{
-			String response = c.consume(fruit); // <-- Breaks if T is Apple
-			responses.add(response);
+			Collection<FruitConsumer<? extends Fruit>> cons = consumers.get(key);
+			for (FruitConsumer<? extends Fruit> c : cons)
+			{
+				// Safe cast, due to the register-method requirements
+				FruitConsumer<T> consumer = (FruitConsumer<T>) c;
+
+				String response = consumer.consume(fruit);
+				responses.add(response);
+			}
 		}
+		while (key != Fruit.class && (key = key.getSuperclass()) != null);
+
 		return responses.stream().collect(Collectors.joining(" | ", "[", "]"));
 	}
 }
